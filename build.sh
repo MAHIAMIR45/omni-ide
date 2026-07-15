@@ -4,11 +4,11 @@ set -e
 echo "==> Installing root dependencies..."
 npm install --legacy-peer-deps --no-audit --no-fund
 
-echo "==> Installing client dependencies..."
+echo "==> Installing client dependencies (including devDeps for build)..."
 cd client
-npm install --legacy-peer-deps --no-audit --no-fund
+npm install --include=dev --legacy-peer-deps --no-audit --no-fund
 
-echo "==> Building client (memory-limited)..."
-NODE_OPTIONS="--max-old-space-size=400" npm run build
+echo "==> Building client..."
+NODE_OPTIONS="--max-old-space-size=400" ./node_modules/.bin/vite build
 
 echo "==> Build complete!"
