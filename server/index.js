@@ -66,6 +66,9 @@ app.use(passport.session());
 // Configure passport
 require('./config/passport')(passport);
 
+// Health check (used by Render and other platforms)
+app.get('/health', (req, res) => res.json({ ok: true }));
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/github', githubRoutes);
