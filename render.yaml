@@ -4,7 +4,7 @@ services:
     env: node
     region: oregon
     plan: free
-    buildCommand: npm install --legacy-peer-deps --no-audit --no-fund && cd client && npm install --include=dev --legacy-peer-deps --no-audit --no-fund && NODE_OPTIONS=--max-old-space-size=400 ./node_modules/.bin/vite build
+    buildCommand: npm_config_production=false npm install && cd client && npm_config_production=false npm install && NODE_OPTIONS=--max-old-space-size=512 npm run build
     startCommand: node server/index.js
     healthCheckPath: /api/status
     envVars:
