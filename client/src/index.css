@@ -1,0 +1,141 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html, body, #root {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+  }
+}
+
+@layer components {
+  .omni-btn {
+    @apply px-4 py-2 rounded-lg font-medium text-sm transition-all duration-200 cursor-pointer select-none;
+  }
+  .omni-btn-primary {
+    @apply omni-btn bg-omni-accent text-omni-bg hover:bg-omni-accentDark active:scale-95;
+  }
+  .omni-btn-ghost {
+    @apply omni-btn border border-omni-border text-omni-muted hover:text-omni-text hover:border-omni-accent active:scale-95;
+  }
+  .omni-btn-danger {
+    @apply omni-btn bg-omni-red/20 text-omni-red border border-omni-red/30 hover:bg-omni-red hover:text-white active:scale-95;
+  }
+  .omni-panel {
+    @apply bg-omni-panel border border-omni-border rounded-xl;
+  }
+  .omni-input {
+    @apply bg-omni-surface border border-omni-border rounded-lg px-3 py-2 text-omni-text text-sm
+           placeholder-omni-muted focus:outline-none focus:border-omni-accent transition-colors;
+  }
+  .omni-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium;
+  }
+  .omni-status-live {
+    @apply omni-badge bg-omni-green/15 text-omni-green border border-omni-green/30;
+  }
+  .omni-status-offline {
+    @apply omni-badge bg-omni-red/15 text-omni-red border border-omni-red/30;
+  }
+}
+
+/* Monaco editor overrides */
+.monaco-editor .margin { background: #0f1525 !important; }
+.monaco-editor, .monaco-editor-background, .monaco-editor .inputarea.ime-input {
+  background-color: #0f1525 !important;
+}
+
+/* Xterm overrides */
+.xterm-viewport { background: #0a0e1a !important; }
+.xterm { padding: 8px !important; }
+
+/* Custom scrollbar */
+.custom-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: #1e2d45 transparent;
+}
+.custom-scroll::-webkit-scrollbar { width: 5px; }
+.custom-scroll::-webkit-scrollbar-track { background: transparent; }
+.custom-scroll::-webkit-scrollbar-thumb { background: #1e2d45; border-radius: 3px; }
+.custom-scroll::-webkit-scrollbar-thumb:hover { background: #00d4ff44; }
+
+/* Animated gradient border */
+.glow-border {
+  position: relative;
+}
+.glow-border::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #00d4ff, #7c3aed, #00d4ff);
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+  z-index: -1;
+}
+@keyframes gradient-shift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Typing cursor */
+.typing::after {
+  content: '▋';
+  animation: blink 1s step-end infinite;
+  color: #00d4ff;
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Chat message code blocks */
+.chat-content pre {
+  @apply bg-omni-bg border border-omni-border rounded-lg p-4 my-2 overflow-x-auto text-sm font-mono;
+}
+.chat-content code:not(pre > code) {
+  @apply bg-omni-bg text-omni-accent px-1.5 py-0.5 rounded text-sm font-mono;
+}
+.chat-content p { @apply mb-2 leading-relaxed; }
+.chat-content ul { @apply pl-4 mb-2; }
+.chat-content li { @apply mb-1; }
+.chat-content h1, .chat-content h2, .chat-content h3 {
+  @apply font-semibold text-omni-text mb-2 mt-3;
+}
+
+/* Drop zone */
+.drop-active {
+  @apply border-omni-accent bg-omni-accent/5;
+}
+
+/* File tree hover */
+.file-tree-item:hover {
+  background: rgba(0, 212, 255, 0.06);
+}
+.file-tree-item.active {
+  background: rgba(0, 212, 255, 0.12);
+  border-left: 2px solid #00d4ff;
+}
+
+/* Resize handle */
+.resize-handle {
+  cursor: col-resize;
+  user-select: none;
+  background: #1e2d45;
+  transition: background 0.2s;
+}
+.resize-handle:hover { background: #00d4ff44; }
+
+/* Loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.shimmer {
+  background: linear-gradient(90deg, #0f1525 25%, #1e2d45 50%, #0f1525 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
