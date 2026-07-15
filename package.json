@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently --names \"EXPRESS,VITE\" --prefix-colors \"cyan,magenta\" \"nodemon server/index.js\" \"cd client && npm run dev\"",
     "server": "nodemon server/index.js",
-    "build": "cd client && npm install && npm run build",
+    "build": "cd client && npm run build",
     "start": "node server/index.js",
     "install:all": "npm install && cd client && npm install"
   },
