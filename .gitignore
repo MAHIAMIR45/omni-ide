@@ -1,6 +1,6 @@
 node_modules/
 client/node_modules/
-client/dist/
+# client/dist/ — pre-built and committed for Render deployment
 temp/uploads/
 .env
 .env.local
