@@ -8,6 +8,9 @@ const passport = require('passport');
 const path = require('path');
 const fs = require('fs-extra');
 const cron = require('node-cron');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+
+const isDev = process.env.NODE_ENV !== 'production';
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -74,13 +77,50 @@ app.use('/api/status', statusRoutes);
 // Serve static uploads (temporarily accessible)
 app.use('/uploads', express.static(path.join(__dirname, '../temp/uploads')));
 
-// Serve built React frontend in production
+// Serve frontend
 const clientBuildPath = path.join(__dirname, '../client/dist');
-if (fs.existsSync(clientBuildPath)) {
-  app.use(express.static(clientBuildPath));
+
+if (!isDev && fs.existsSync(clientBuildPath)) {
+  // Production: serve built Vite output
+  app.use(express.static(clientBuildPath, { maxAge: '1d' }));
   app.get('*', (req, res) => {
     res.sendFile(path.join(clientBuildPath, 'index.html'));
   });
+} else if (isDev) {
+  // Development: proxy all non-API requests to Vite dev server
+  const VITE_PORT = process.env.VITE_PORT || 5174;
+  const viteProxy = createProxyMiddleware({
+    target: `http://localhost:${VITE_PORT}`,
+    changeOrigin: true,
+    ws: true, // proxy WebSockets for HMR
+    on: {
+      error: (err, req, res) => {
+        // Vite not ready yet — send a loading page
+        if (res && !res.headersSent) {
+          res.setHeader('Content-Type', 'text/html');
+          res.status(503).send(`<!DOCTYPE html><html><head>
+            <meta http-equiv="refresh" content="2">
+            <title>OMNI IDE — Starting...</title>
+            <style>
+              body{background:#0a0e1a;color:#e2e8f0;font-family:sans-serif;
+                   display:flex;align-items:center;justify-content:center;height:100vh;margin:0;}
+              .box{text-align:center;}
+              .dot{display:inline-block;width:10px;height:10px;border-radius:50%;
+                   background:#00d4ff;margin:0 4px;animation:bounce 0.8s infinite alternate;}
+              .dot:nth-child(2){animation-delay:.2s;}
+              .dot:nth-child(3){animation-delay:.4s;}
+              @keyframes bounce{to{opacity:.2;transform:translateY(-8px);}}
+            </style>
+          </head><body><div class="box">
+            <h2 style="color:#00d4ff;margin-bottom:8px">⚡ OMNI IDE</h2>
+            <p style="color:#64748b;margin-bottom:16px">Starting development server...</p>
+            <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          </div></body></html>`);
+        }
+      },
+    },
+  });
+  app.use('/', viteProxy);
 }
 
 // Auto-delete expired uploads every 5 minutes

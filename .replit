@@ -15,23 +15,7 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "Backend"
-
-[[workflows.workflow.tasks]]
-task = "workflow.run"
 args = "Start application"
-
-[[workflows.workflow]]
-name = "Backend"
-author = "agent"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "node server/index.js"
-waitForPort = 5000
-
-[workflows.workflow.metadata]
-outputType = "console"
 
 [[workflows.workflow]]
 name = "Start application"
@@ -39,8 +23,8 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "cd client && npm install && npm run dev"
-waitForPort = 5173
+args = "npm run dev"
+waitForPort = 5000
 
 [workflows.workflow.metadata]
 outputType = "webview"
@@ -52,3 +36,7 @@ externalPort = 80
 [[ports]]
 localPort = 5173
 externalPort = 5173
+
+[[ports]]
+localPort = 5174
+externalPort = 3000
