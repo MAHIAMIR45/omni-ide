@@ -1,4 +1,15 @@
 require('dotenv').config();
+
+// Catch unhandled rejections/exceptions early to expose crash reason
+process.on('uncaughtException', (err) => {
+  console.error('[CRASH] uncaughtException:', err.stack || err.message);
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason) => {
+  console.error('[CRASH] unhandledRejection:', reason);
+  process.exit(1);
+});
+
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
