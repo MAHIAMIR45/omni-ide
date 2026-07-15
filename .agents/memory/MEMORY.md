@@ -1,0 +1,1 @@
+- [OMNI IDE project setup](omni-ide-setup.md) — full-stack AI IDE; backend port 5000, frontend port 5173 (Vite proxy); both workflows required.
